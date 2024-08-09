@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>  
 
 using namespace std;
 
@@ -35,6 +36,20 @@ public:
             } else {
                 balance -= amount;
                 cout << "Withdrawal successful. New balance: " << balance << endl;
+            }
+        } else {
+            cout << "Account not active." << endl;
+        }
+    }
+
+    void transfer(Account &toAccount, double amount) {
+        if (active) {
+            if (amount > balance) {
+                cout << "Insufficient balance to transfer!" << endl;
+            } else {
+                withdraw(amount);
+                toAccount.deposit(amount);
+                cout << "Transfer successful. Transferred " << amount << " to Account Number: " << toAccount.getAccNumber() << endl;
             }
         } else {
             cout << "Account not active." << endl;
@@ -80,16 +95,18 @@ int main() {
     Bank bank;
     int choice;
     string name;
-    int accNumber;
+    int accNumber, accNumberTo;
     double amount;
 
     while (true) {
-        cout << "\n1. Create Account\n2. Deposit\n3. Withdraw\n4. Check Balance\n5. Exit\n";
+        cout<< "***BANK MANAGEMENT SYSTEM***\n\n";
+        cout << "\n1. Create Account\n2. Deposit\n3. Withdraw\n4. Check Balance\n5. Transfer Money\n6. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
-        case 1:
+        case 1:system("clear");
+        system("clear");
             cout << "Enter your name: ";
             cin >> name;
             cout << "Enter initial deposit: ";
@@ -97,6 +114,7 @@ int main() {
             bank.createAccount(name, amount);
             break;
         case 2:
+        system("clear");
             cout << "Enter account number: ";
             cin >> accNumber;
             cout << "Enter amount to deposit: ";
@@ -108,6 +126,7 @@ int main() {
             }
             break;
         case 3:
+        system("clear");
             cout << "Enter account number: ";
             cin >> accNumber;
             cout << "Enter amount to withdraw: ";
@@ -119,6 +138,7 @@ int main() {
             }
             break;
         case 4:
+        system("clear");
             cout << "Enter account number: ";
             cin >> accNumber;
             if (Account* acc = bank.getAccount(accNumber)) {
@@ -128,11 +148,30 @@ int main() {
             }
             break;
         case 5:
+        system("clear");
+            cout << "Enter your account number: ";
+            cin >> accNumber;
+            cout << "Enter the account number to transfer to: ";
+            cin >> accNumberTo;
+            cout << "Enter amount to transfer: ";
+            cin >> amount;
+            if (Account* fromAcc = bank.getAccount(accNumber)) {
+                if (Account* toAcc = bank.getAccount(accNumberTo)) {
+                    fromAcc->transfer(*toAcc, amount);
+                } else {
+                    cout << "Invalid destination account number." << endl;
+                }
+            } else {
+                cout << "Invalid account number." << endl;
+            }
+            break;
+        case 6:
             return 0;
         default:
             cout << "Invalid choice, please try again." << endl;
         }
     }
+return 0;
 
-    return 0;
+
 }
